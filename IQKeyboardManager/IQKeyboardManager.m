@@ -360,7 +360,7 @@ NSInteger const kIQPreviousNextButtonToolbarTag     =   -1005;
             //If viewController is kind of enable viewController class, then assuming it's enabled.
             for (Class enabledClass in _enabledDistanceHandlingClasses)
             {
-                if ([textFieldViewController isKindOfClass:enabledClass])
+                if ([textFieldViewController isKindOfClass:enabledClass] || [_textFieldView isKindOfClass:enabledClass])
                 {
                     enable = YES;
                     break;
@@ -373,7 +373,7 @@ NSInteger const kIQPreviousNextButtonToolbarTag     =   -1005;
             //If viewController is kind of disable viewController class, then assuming it's disable.
             for (Class disabledClass in _disabledDistanceHandlingClasses)
             {
-                if ([textFieldViewController isKindOfClass:disabledClass])
+                if ([textFieldViewController isKindOfClass:disabledClass] || [_textFieldView isKindOfClass:disabledClass])
                 {
                     enable = NO;
                     break;
@@ -475,7 +475,7 @@ NSInteger const kIQPreviousNextButtonToolbarTag     =   -1005;
             //If found any toolbar enabled classes then return.
             for (Class enabledToolbarClass in _enabledToolbarClasses)
             {
-                if ([textFieldViewController isKindOfClass:enabledToolbarClass])
+                if ([textFieldViewController isKindOfClass:enabledToolbarClass] || [_textFieldView isKindOfClass:enabledToolbarClass])
                 {
                     enableAutoToolbar = YES;
                     break;
@@ -488,7 +488,7 @@ NSInteger const kIQPreviousNextButtonToolbarTag     =   -1005;
             //If found any toolbar disabled classes then return.
             for (Class disabledToolbarClass in _disabledToolbarClasses)
             {
-                if ([textFieldViewController isKindOfClass:disabledToolbarClass])
+                if ([textFieldViewController isKindOfClass:disabledToolbarClass] || [_textFieldView isKindOfClass:disabledToolbarClass])
                 {
                     enableAutoToolbar = NO;
                     break;

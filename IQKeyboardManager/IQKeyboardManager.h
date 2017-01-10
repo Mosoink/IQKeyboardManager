@@ -234,11 +234,17 @@ extern NSInteger const kIQPreviousNextButtonToolbarTag;
 ///---------------------------------------------
 
 /**
+ 
+ * Modified To: UIView<UITextInput> / UIViewController
+ 
  Disable distance handling within the scope of disabled distance handling viewControllers classes. Within this scope, 'enabled' property is ignored. Class should be kind of UIViewController.
  */
 @property(nonatomic, strong, nonnull, readonly) NSMutableSet<Class> *disabledDistanceHandlingClasses;
 
 /**
+ 
+ * Modified To: UIView<UITextInput> / UIViewController
+ 
  Enable distance handling within the scope of enabled distance handling viewControllers classes. Within this scope, 'enabled' property is ignored. Class should be kind of UIViewController. If same Class is added in disabledDistanceHandlingClasses list, then enabledDistanceHandlingClasses will we ignored.
  */
 @property(nonatomic, strong, nonnull, readonly) NSMutableSet<Class> *enabledDistanceHandlingClasses;
