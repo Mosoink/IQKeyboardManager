@@ -22,30 +22,51 @@
 // THE SOFTWARE.
 
 #import "IQUIWindow+Hierarchy.h"
+#import <UIKit/UITabBarController.h>
 #import <UIKit/UINavigationController.h>
 
 @implementation UIWindow (IQ_UIWindow_Hierarchy)
 
-- (UIViewController*)topMostController
-{
+//- (UIViewController*)topMostController
+//{
+//    UIViewController *topController = [self rootViewController];
+//    
+//    //  Getting topMost ViewController
+//    while ([topController presentedViewController])	topController = [topController presentedViewController];
+//	
+//    //  Returning topMost ViewController
+//    return topController;
+//}
+//
+//- (UIViewController*)currentViewController;
+//{
+//    UIViewController *currentViewController = [self topMostController];
+//    
+//    while ([currentViewController isKindOfClass:[UINavigationController class]] && [(UINavigationController*)currentViewController topViewController])
+//        currentViewController = [(UINavigationController*)currentViewController topViewController];
+//    
+//    return currentViewController;
+//}
+
+- (UIViewController*)topMostController{
     UIViewController *topController = [self rootViewController];
-    
-    //  Getting topMost ViewController
-    while ([topController presentedViewController])	topController = [topController presentedViewController];
-	
-    //  Returning topMost ViewController
+    while ([topController presentedViewController] || [topController isKindOfClass:[UITabBarController class]])	{
+        if ([topController isKindOfClass:[UITabBarController class]]) {
+            UITabBarController *tab = (UITabBarController*)topController;
+            topController = [tab.viewControllers objectAtIndex:tab.selectedIndex];
+        }else{
+            topController = [topController presentedViewController];
+        }
+    }
     return topController;
 }
 
-- (UIViewController*)currentViewController;
-{
+- (UIViewController*)currentViewController{
     UIViewController *currentViewController = [self topMostController];
-    
-    while ([currentViewController isKindOfClass:[UINavigationController class]] && [(UINavigationController*)currentViewController topViewController])
+    while ([currentViewController isKindOfClass:[UINavigationController class]]
+           && [(UINavigationController*)currentViewController topViewController])
         currentViewController = [(UINavigationController*)currentViewController topViewController];
-    
     return currentViewController;
 }
-
 
 @end
