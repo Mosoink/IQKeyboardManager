@@ -24,9 +24,9 @@
 
 @implementation SettingsViewController
 {
-    NSArray *sectionTitles;
-    NSArray *keyboardManagerProperties;
-    NSArray *keyboardManagerPropertyDetails;
+    NSArray<NSString*> *sectionTitles;
+    NSArray<NSArray*> *keyboardManagerProperties;
+    NSArray<NSArray*> *keyboardManagerPropertyDetails;
     
     NSIndexPath *selectedIndexPathForOptions;
 }
@@ -43,7 +43,7 @@
                       @"IQKeyboardManager Debug"];
 
     
-    keyboardManagerProperties = @[@[@"Enable", @"Keyboard Distance From TextField", @"Prevent Showing Bottom Blank Space"],
+    keyboardManagerProperties = @[@[@"Enable", @"Keyboard Distance From TextField"],
                                   @[@"Enable AutoToolbar",@"Toolbar Manage Behaviour",@"Should Toolbar Uses TextField TintColor",@"Should Show TextField Placeholder",@"Placeholder Font",@"Toolbar Tint Color",@"Toolbar Done BarButtonItem Image",@"Toolbar Done Button Text"],
                                   @[@"Override Keyboard Appearance",@"UIKeyboard Appearance"],
                                   @[@"Should Resign On Touch Outside"],
@@ -51,7 +51,7 @@
                                   @[@"Debugging logs in Console"]];
 
     
-    keyboardManagerPropertyDetails = @[@[@"Enable/Disable IQKeyboardManager",@"Set keyboard distance from textField",@"Prevent to show blank space between UIKeyboard and View"],
+    keyboardManagerPropertyDetails = @[@[@"Enable/Disable IQKeyboardManager",@"Set keyboard distance from textField"],
                                        @[@"Automatic add the IQToolbar on UIKeyboard",@"AutoToolbar previous/next button managing behaviour",@"Uses textField's tintColor property for IQToolbar",@"Add the textField's placeholder text on IQToolbar",@"UIFont for IQToolbar placeholder text",@"Override toolbar tintColor property",@"Replace toolbar done button text with provided image",@"Override toolbar done button text"],
                                        @[@"Override the keyboardAppearance for all UITextField/UITextView",@"All the UITextField keyboardAppearance is set using this property"],
                                        @[@"Resigns Keyboard on touching outside of UITextField/View"],
@@ -79,13 +79,6 @@
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
 }
 
-- (void)preventShowingBottomBlankSpaceAction:(UISwitch *)sender
-{
-    [[IQKeyboardManager sharedManager] setPreventShowingBottomBlankSpace:sender.on];
-    
-    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
-}
-
 /**  IQToolbar handling     */
 
 - (void)enableAutoToolbarAction:(UISwitch *)sender
@@ -100,9 +93,9 @@
     [[IQKeyboardManager sharedManager] setShouldToolbarUsesTextFieldTintColor:sender.on];
 }
 
-- (void)shouldShowTextFieldPlaceholder:(UISwitch *)sender
+- (void)shouldShowToolbarPlaceholder:(UISwitch *)sender
 {
-    [[IQKeyboardManager sharedManager] setShouldShowTextFieldPlaceholder:sender.on];
+    [[IQKeyboardManager sharedManager] setShouldShowToolbarPlaceholder:sender.on];
     
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
 }
@@ -185,7 +178,7 @@
             {
                 return 1;
             }
-            else if ([[IQKeyboardManager sharedManager] shouldShowTextFieldPlaceholder] == NO)
+            else if ([[IQKeyboardManager sharedManager] shouldShowToolbarPlaceholder] == NO)
             {
                 return 4;
             }
@@ -249,18 +242,6 @@
                     return cell;
                 }
                     break;
-                case 2:
-                {
-                    SwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([SwitchTableViewCell class])];
-                    cell.switchEnable.enabled = YES;
-                    cell.labelTitle.text = keyboardManagerProperties[indexPath.section][indexPath.row];
-                    cell.labelSubtitle.text = keyboardManagerPropertyDetails[indexPath.section][indexPath.row];
-                    cell.switchEnable.on = [[IQKeyboardManager sharedManager] preventShowingBottomBlankSpace];
-                    [cell.switchEnable removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-                    [cell.switchEnable addTarget:self action:@selector(preventShowingBottomBlankSpaceAction:) forControlEvents:UIControlEventValueChanged];
-                    return cell;
-                }
-                    break;
             }
         }
             break;
@@ -308,9 +289,9 @@
                     cell.switchEnable.enabled = YES;
                     cell.labelTitle.text = keyboardManagerProperties[indexPath.section][indexPath.row];
                     cell.labelSubtitle.text = keyboardManagerPropertyDetails[indexPath.section][indexPath.row];
-                    cell.switchEnable.on = [[IQKeyboardManager sharedManager] shouldShowTextFieldPlaceholder];
+                    cell.switchEnable.on = [[IQKeyboardManager sharedManager] shouldShowToolbarPlaceholder];
                     [cell.switchEnable removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-                    [cell.switchEnable addTarget:self action:@selector(shouldShowTextFieldPlaceholder:) forControlEvents:UIControlEventValueChanged];
+                    [cell.switchEnable addTarget:self action:@selector(shouldShowToolbarPlaceholder:) forControlEvents:UIControlEventValueChanged];
                     return cell;
                 }
                     break;
@@ -448,7 +429,7 @@
             
     }
     
-    return nil;
+    return [UITableViewCell new];
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -494,13 +475,13 @@
 
         if (selectedIndexPathForOptions.section == 1 && selectedIndexPathForOptions.row == 1)
         {
-            controller.title = @"Toolbar Manage Behaviour";
+            controller.title = NSLocalizedString(@"Toolbar Manage Behaviour",nil);
             controller.options = @[@"IQAutoToolbar By Subviews",@"IQAutoToolbar By Tag",@"IQAutoToolbar By Position"];
             controller.selectedIndex = [[IQKeyboardManager sharedManager] toolbarManageBehaviour];
         }
         else if (selectedIndexPathForOptions.section == 1 && selectedIndexPathForOptions.row == 4)
         {
-            controller.title = @"Fonts";
+            controller.title = NSLocalizedString(@"Fonts",nil);
             
             controller.options = @[@"Bold System Font",@"Italic system font",@"Regular"];
             
@@ -515,7 +496,7 @@
         }
         else if (selectedIndexPathForOptions.section == 2 && selectedIndexPathForOptions.row == 1)
         {
-            controller.title = @"Keyboard Appearance";
+            controller.title = NSLocalizedString(@"Keyboard Appearance",nil);
             controller.options = @[@"UIKeyboardAppearance Default",@"UIKeyboardAppearance Dark",@"UIKeyboardAppearance Light"];
             controller.selectedIndex = [[IQKeyboardManager sharedManager] keyboardAppearance];
         }

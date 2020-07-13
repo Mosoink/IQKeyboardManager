@@ -13,7 +13,6 @@
 
 @interface CustomViewController ()<UIPopoverPresentationControllerDelegate>
 {
-    IBOutlet UIView *settingsView;
     IQKeyboardReturnKeyHandler *returnHandler;
     
     IBOutlet UISwitch *switchDisableViewController;
@@ -26,23 +25,27 @@
     IBOutlet UISwitch *switchEnableTouchResign;
     
     IBOutlet UISwitch *switchAllowPreviousNext;
-    
-    
-    
-    IBOutlet NSLayoutConstraint *settingsTopConstraint;
 }
+
+@property(nonatomic, strong) IBOutlet NSLayoutConstraint *settingsTopConstraint;
+@property(nonatomic, strong) IBOutlet UIView *settingsView;
 
 @end
 
 @implementation CustomViewController
 
+-(void)dealloc
+{
+    returnHandler = nil;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    settingsView.layer.shadowColor = [[UIColor blackColor] CGColor];
-    settingsView.layer.shadowOffset = CGSizeZero;
-    settingsView.layer.shadowRadius = 5.0;
-    settingsView.layer.shadowOpacity = 0.5;
+    self.settingsView.layer.shadowColor = [[UIColor blackColor] CGColor];
+    self.settingsView.layer.shadowOffset = CGSizeZero;
+    self.settingsView.layer.shadowRadius = 5.0;
+    self.settingsView.layer.shadowOpacity = 0.5;
     
     returnHandler = [[IQKeyboardReturnKeyHandler alloc] initWithViewController:self];
     returnHandler.lastTextFieldReturnKeyType = UIReturnKeyDone;
@@ -69,19 +72,21 @@
 {
     if (sender.state == UIGestureRecognizerStateEnded)
     {
+        __weak __typeof__(self) weakSelf = self;
+
         [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionAllowUserInteraction|7<<16 animations:^{
             
-            if (settingsTopConstraint.constant != 0)
+            if (weakSelf.settingsTopConstraint.constant != 0)
             {
-                settingsTopConstraint.constant = 0;
+                weakSelf.settingsTopConstraint.constant = 0;
             }
             else
             {
-                settingsTopConstraint.constant = -settingsView.frame.size.height+30;
+                weakSelf.settingsTopConstraint.constant = -weakSelf.settingsView.frame.size.height+30;
             }
             
-            [self.view setNeedsLayout];
-            [self.view layoutIfNeeded];
+            [weakSelf.view setNeedsLayout];
+            [weakSelf.view layoutIfNeeded];
             
         } completion:^(BOOL finished) {
             

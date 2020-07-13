@@ -8,7 +8,8 @@
 
 #import "ManualToolbarViewController.h"
 #import "IQUIView+IQKeyboardToolbar.h"
-
+#import "IQToolbar.h"
+#import "IQTitleBarButtonItem.h"
 
 @interface ManualToolbarViewController ()<UIPopoverPresentationControllerDelegate>
 
@@ -16,7 +17,7 @@
 -(void)nextAction:(id)sender;
 -(void)doneAction:(id)sender;
 
-
+@property(nonatomic, strong) IBOutlet UITextField *textField4;
 
 @end
 
@@ -25,9 +26,16 @@
     IBOutlet UITextField *textField1;
     IBOutlet UITextField *textField2;
     IBOutlet UITextView *textView3;
-    IBOutlet UITextField *textField4;
     
     IBOutlet UITextField *textField5;
+}
+
+-(void)dealloc
+{
+    textField1 = nil;
+    textField2 = nil;
+    textView3 = nil;
+    textField5 = nil;
 }
 
 - (void)viewDidLoad
@@ -35,17 +43,20 @@
     [super viewDidLoad];
     
     [textField1 addPreviousNextDoneOnKeyboardWithTarget:self previousAction:@selector(previousAction:) nextAction:@selector(nextAction:) doneAction:@selector(doneAction:) shouldShowPlaceholder:YES];
-    [textField1 setEnablePrevious:NO next:YES];
+    textField1.keyboardToolbar.previousBarButton.enabled = NO;
+    textField1.keyboardToolbar.nextBarButton.enabled = YES;
+
     
     [textField2 addPreviousNextDoneOnKeyboardWithTarget:self previousAction:@selector(previousAction:) nextAction:@selector(nextAction:) doneAction:@selector(doneAction:) shouldShowPlaceholder:YES];
-    [textField2 setEnablePrevious:YES next:NO];
+    textField2.keyboardToolbar.previousBarButton.enabled = YES;
+    textField2.keyboardToolbar.nextBarButton.enabled = NO;
 
     [textView3 addPreviousNextDoneOnKeyboardWithTarget:self previousAction:@selector(previousAction:) nextAction:@selector(nextAction:) doneAction:@selector(doneAction:) shouldShowPlaceholder:YES];
 
-    [textField4 setTitleTarget:self action:@selector(titleAction:)];
-    textField4.placeholderText = @"Saved Users";
+    [self.textField4.keyboardToolbar.titleBarButton setTarget:self action:@selector(titleAction:)];
+    self.textField4.toolbarPlaceholder = @"Saved Users";
     
-    [textField4 addDoneOnKeyboardWithTarget:self action:@selector(doneAction:) shouldShowPlaceholder:YES];
+    [self.textField4 addDoneOnKeyboardWithTarget:self action:@selector(doneAction:) shouldShowPlaceholder:YES];
     
     textField5.inputAccessoryView = [[UIView alloc] init];
 }
@@ -83,14 +94,16 @@
 {
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
-    [alertController addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+    [alertController addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel",nil) style:UIAlertActionStyleCancel handler:nil]];
     
-    [alertController addAction:[UIAlertAction actionWithTitle:@"test@example.com" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        textField4.text = @"test@example.com";
+    __weak __typeof__(self) weakSelf = self;
+
+    [alertController addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"test@example.com",nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        weakSelf.textField4.text = NSLocalizedString(@"test@example.com",nil);
     }]];
     
-    [alertController addAction:[UIAlertAction actionWithTitle:@"demo@example.com" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        textField4.text = @"demo@example.com";
+    [alertController addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"demo@example.com",nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        weakSelf.textField4.text = NSLocalizedString(@"demo@example.com",nil);
     }]];
     
     alertController.popoverPresentationController.sourceView = sender;
@@ -118,11 +131,6 @@
 -(void)prepareForPopoverPresentation:(UIPopoverPresentationController *)popoverPresentationController
 {
     [self.view endEditing:YES];
-}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    return YES;
 }
 
 - (BOOL)shouldAutorotate

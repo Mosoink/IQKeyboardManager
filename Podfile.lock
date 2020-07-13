@@ -1,10 +1,16 @@
 PODS:
-  - IQKeyboardManager (4.0.7)
-  - IQKeyboardManagerSwift (4.0.7)
+  - IQDropDownTextField (1.1.1)
+  - IQKeyboardManager (6.5.5)
+  - IQKeyboardManagerSwift (6.5.5)
 
 DEPENDENCIES:
+  - IQDropDownTextField
   - IQKeyboardManager (from `.`)
   - IQKeyboardManagerSwift (from `.`)
+
+SPEC REPOS:
+  trunk:
+    - IQDropDownTextField
 
 EXTERNAL SOURCES:
   IQKeyboardManager:
@@ -13,9 +19,10 @@ EXTERNAL SOURCES:
     :path: "."
 
 SPEC CHECKSUMS:
-  IQKeyboardManager: 69002bb4fea60596b710e57d426abc00e5063630
-  IQKeyboardManagerSwift: 58bbcf46b5cf9fd4ed625d28a60cb2fbae4ab0f4
+  IQDropDownTextField: 3d2e5728a2b83ff5dbb14cb9b497a80005124cbe
+  IQKeyboardManager: 3a8b9e603f8b0eeaf5f096a1f2b2cfcf121992ef
+  IQKeyboardManagerSwift: 0fb93310284665245591f50f7a5e38de615960b7
 
-PODFILE CHECKSUM: 2fbc048969bb6fcb2e7e11b19e38027eeef497be
+PODFILE CHECKSUM: 8213d203d0ee1c26652ada8ddf82a497746d9712
 
-COCOAPODS: 1.1.1
+COCOAPODS: 1.8.4

@@ -8,40 +8,51 @@
 
 import UIKit
 import IQKeyboardManagerSwift
+import IQDropDownTextField
 
 class TextFieldViewController: UIViewController, UITextViewDelegate, UIPopoverPresentationControllerDelegate {
     
     @IBOutlet fileprivate var textField3 : UITextField!
     @IBOutlet var textView1: IQTextView!
+    @IBOutlet var textView2: UITextView!
 
     @IBOutlet fileprivate var dropDownTextField : IQDropDownTextField!
 
     @IBOutlet fileprivate var buttonPush : UIButton!
     @IBOutlet fileprivate var buttonPresent : UIButton!
 
-    func previousAction(_ sender : UITextField) {
+    @objc func previousAction(_ sender : UITextField) {
         print("PreviousAction")
     }
     
-    func nextAction(_ sender : UITextField) {
+    @objc func nextAction(_ sender : UITextField) {
         print("nextAction")
     }
     
-    func doneAction(_ sender : UITextField) {
+    @objc func doneAction(_ sender : UITextField) {
         print("doneAction")
+    }
+
+    deinit {
+        textField3 = nil
+        textView1 = nil
+        dropDownTextField = nil
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
+        textView2.enableMode = .disabled
         textView1.delegate = self
-        textField3.setCustomPreviousTarget(self, action: #selector(self.previousAction(_:)))
-        textField3.setCustomNextTarget(self, action: #selector(self.nextAction(_:)))
-        textField3.setCustomDoneTarget(self, action: #selector(self.doneAction(_:)))
+
+//        textView1.attributedPlaceholder = NSAttributedString(string: "Attributed string from code is supported too", attributes: [.foregroundColor: UIColor.red])
+
+        textField3.keyboardToolbar.previousBarButton.setTarget(self, action: #selector(self.previousAction(_:)))
+        textField3.keyboardToolbar.nextBarButton.setTarget(self, action: #selector(self.nextAction(_:)))
+        textField3.keyboardToolbar.doneBarButton.setTarget(self, action: #selector(self.doneAction(_:)))
         dropDownTextField.keyboardDistanceFromTextField = 150;
         
-        var itemLists = [NSString]()
+        var itemLists = [String]()
         itemLists.append("Zero Line Of Code")
         itemLists.append("No More UIScrollView")
         itemLists.append("No More Subclasses")
@@ -69,7 +80,7 @@ class TextFieldViewController: UIViewController, UITextViewDelegate, UIPopoverPr
         if (self.presentingViewController != nil)
         {
             buttonPush.isHidden = true
-            buttonPresent.setTitle("Dismiss", for:UIControlState())
+            buttonPresent.setTitle("Dismiss", for:.normal)
         }
     }
     

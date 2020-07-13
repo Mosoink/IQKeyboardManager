@@ -9,17 +9,23 @@
 import UIKit
 import IQKeyboardManagerSwift
 
-class NavigationBarViewController: UIViewController, UIPopoverPresentationControllerDelegate {
+class NavigationBarViewController: UIViewController, UITextFieldDelegate, UIPopoverPresentationControllerDelegate {
     
     fileprivate var returnKeyHandler : IQKeyboardReturnKeyHandler!
     @IBOutlet fileprivate var textField2 : UITextField!
     @IBOutlet fileprivate var textField3 : UITextField!
     @IBOutlet fileprivate var scrollView : UIScrollView!
 
+    deinit {
+        returnKeyHandler = nil
+        textField2 = nil
+        textField3 = nil
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        textField3.placeholderText = "This is the customised placeholder title for displaying as toolbar title"
+        textField3.toolbarPlaceholder = "This is the customised placeholder title for displaying as toolbar title"
 
         returnKeyHandler = IQKeyboardReturnKeyHandler(controller: self)
         returnKeyHandler.lastTextFieldReturnKeyType = UIReturnKeyType.done
@@ -34,7 +40,7 @@ class NavigationBarViewController: UIViewController, UIPopoverPresentationContro
     }
     
     @IBAction func shouldHideTitle(_ sender : UISwitch!) {
-        textField2.shouldHidePlaceholderText = !textField2.shouldHidePlaceholderText;
+        textField2.shouldHideToolbarPlaceholder = !textField2.shouldHideToolbarPlaceholder;
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -53,6 +59,10 @@ class NavigationBarViewController: UIViewController, UIPopoverPresentationContro
                 controller.popoverPresentationController?.delegate = self
             }
         }
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        return true
     }
     
     func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {

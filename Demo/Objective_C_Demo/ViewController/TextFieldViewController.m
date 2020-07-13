@@ -15,10 +15,17 @@
 @implementation TextFieldViewController
 {
     IBOutlet UITextField *textField3;
+    IBOutlet UITextView *textView2;
     IBOutlet IQDropDownTextField *dropDownTextField;
 }
 
 #pragma mark - View lifecycle
+
+-(void)dealloc
+{
+    textField3 = nil;
+    dropDownTextField = nil;
+}
 
 -(void)previousAction:(UITextField*)textField
 {
@@ -39,9 +46,12 @@
 {
     [super viewDidLoad];
     
-    [textField3 setCustomPreviousTarget:self action:@selector(previousAction:)];
-    [textField3 setCustomNextTarget:self action:@selector(nextAction:)];
-    [textField3 setCustomDoneTarget:self action:@selector(doneAction:)];
+    textView2.enableMode = IQEnableModeDisabled;
+    
+    textField3.delegate = self;
+    [textField3.keyboardToolbar.previousBarButton setTarget:self action:@selector(previousAction:)];
+    [textField3.keyboardToolbar.nextBarButton setTarget:self action:@selector(nextAction:)];
+    [textField3.keyboardToolbar.doneBarButton setTarget:self action:@selector(doneAction:)];
     
     dropDownTextField.keyboardDistanceFromTextField = 150;
     
@@ -71,7 +81,7 @@
     if (self.presentingViewController)
     {
         [buttonPush setHidden:YES];
-        [buttonPresent setTitle:@"Dismiss" forState:UIControlStateNormal];
+        [buttonPresent setTitle:NSLocalizedString(@"Dismiss",nil) forState:UIControlStateNormal];
     }
 }
 
@@ -132,13 +142,26 @@
     [self.view endEditing:YES];
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+- (BOOL)shouldAutorotate
 {
     return YES;
 }
 
-- (BOOL)shouldAutorotate
+-(void)textFieldDidBeginEditing:(UITextField *)textField
 {
+    if (textField == textField3) {
+//        textField.keyboardToolbar.doneBarButton.enabled = textField.text.length > 0;
+    }
+}
+
+
+-(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    if (textField == textField3) {
+//        NSString *newText = [textField.text stringByReplacingCharactersInRange:range withString:string];
+//        textField.keyboardToolbar.doneBarButton.enabled = newText.length > 0;
+    }
+    
     return YES;
 }
 

@@ -20,7 +20,7 @@
     if (!self.navigationController)
     {
         [buttonPush setHidden:YES];
-        [buttonPresent setTitle:@"Dismiss" forState:UIControlStateNormal];
+        [buttonPresent setTitle:NSLocalizedString(@"Dismiss", nil) forState:UIControlStateNormal];
     }
 }
 
@@ -88,11 +88,6 @@
 -(void)prepareForPopoverPresentation:(UIPopoverPresentationController *)popoverPresentationController
 {
     [self.view endEditing:YES];
-}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    return YES;
 }
 
 - (BOOL)shouldAutorotate

@@ -34,6 +34,7 @@
 -(void)viewDidLoad
 {
     [super viewDidLoad];
+    
     [[IQKeyboardManager sharedManager] setToolbarManageBehaviour:IQAutoToolbarByPosition];
 }
 
@@ -91,12 +92,7 @@
 
 -(BOOL)shouldAutorotate
 {
-    return NO;
-}
-
--(BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
-{
-    return (toInterfaceOrientation == UIInterfaceOrientationPortrait);
+    return YES;
 }
 
 -(UIInterfaceOrientationMask)supportedInterfaceOrientations
