@@ -367,9 +367,8 @@ NSInteger const kIQPreviousNextButtonToolbarTag     =   -1005;
             if (enable == NO)
             {
                 //If viewController is kind of enable viewController class, then assuming it's enabled.
-                if ([textFieldViewController isKindOfClass:enabledClass] || [_textFieldView isKindOfClass:enabledClass])
-                {
-                    if ([textFieldViewController isKindOfClass:enabledClass])
+                for (Class enabledClass in _enabledDistanceHandlingClasses) {
+                    if ([textFieldViewController isKindOfClass:enabledClass] || [_textFieldView isKindOfClass:enabledClass])
                     {
                         enable = YES;
                         break;
@@ -380,9 +379,9 @@ NSInteger const kIQPreviousNextButtonToolbarTag     =   -1005;
             if (enable)
             {
                 //If viewController is kind of disable viewController class, then assuming it's disable.
-                if ([textFieldViewController isKindOfClass:disabledClass] || [_textFieldView isKindOfClass:disabledClass])
-                {
-                    if ([textFieldViewController isKindOfClass:disabledClass])
+                
+                for (Class disabledClass in _disabledDistanceHandlingClasses) {
+                    if ([textFieldViewController isKindOfClass:disabledClass] || [_textFieldView isKindOfClass:disabledClass])
                     {
                         enable = NO;
                         break;
