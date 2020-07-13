@@ -1160,7 +1160,9 @@ NSInteger const kIQPreviousNextButtonToolbarTag     =   -1005;
 
                 UIEdgeInsets newContentInset = textView.contentInset;
                 newContentInset.bottom = bottomInset;
-
+                if (_shouldFixedViewControllerRootView) {
+                    newContentInset.bottom += move;
+                }
                 self.isTextViewContentInsetChanged = YES;
 
                 if (UIEdgeInsetsEqualToEdgeInsets(textView.contentInset, newContentInset) == NO)
@@ -1187,7 +1189,7 @@ NSInteger const kIQPreviousNextButtonToolbarTag     =   -1005;
             if (move>=0)
             {
                 rootViewOrigin.y -= move;
-                
+
                 //  From now prevent keyboard manager to slide up the rootView to more than keyboard height. (Bug ID: #93)
                 rootViewOrigin.y = MAX(rootViewOrigin.y, MIN(0, -(kbSize.height-keyboardDistanceFromTextField)));
 
@@ -1200,9 +1202,11 @@ NSInteger const kIQPreviousNextButtonToolbarTag     =   -1005;
                     __strong __typeof__(self) strongSelf = weakSelf;
                     
                     //  Setting it's new frame
-                    CGRect rect = rootController.view.frame;
-                    rect.origin = rootViewOrigin;
-                    rootController.view.frame = rect;
+                    if (!_shouldFixedViewControllerRootView) {
+                        CGRect rect = rootController.view.frame;
+                        rect.origin = rootViewOrigin;
+                        rootController.view.frame = rect;
+                    }
                     
                     //Animating content if needed (Bug ID: #204)
                     if (strongSelf.layoutIfNeededOnUpdate)
@@ -1214,8 +1218,9 @@ NSInteger const kIQPreviousNextButtonToolbarTag     =   -1005;
                     
                     [strongSelf showLog:[NSString stringWithFormat:@"Set %@ origin to : %@",rootController,NSStringFromCGPoint(rootViewOrigin)]];
                 } completion:NULL];
-
-                self.movedDistance = (_topViewBeginOrigin.y-rootViewOrigin.y);
+                if (!_shouldFixedViewControllerRootView) {
+                    self.movedDistance = (_topViewBeginOrigin.y-rootViewOrigin.y);
+                }
             }
             //  -Negative
             else
@@ -1237,9 +1242,11 @@ NSInteger const kIQPreviousNextButtonToolbarTag     =   -1005;
                         __strong __typeof__(self) strongSelf = weakSelf;
                         
                         //  Setting it's new frame
-                        CGRect rect = rootController.view.frame;
-                        rect.origin = rootViewOrigin;
-                        rootController.view.frame = rect;
+                        if (!_shouldFixedViewControllerRootView) {
+                            CGRect rect = rootController.view.frame;
+                            rect.origin = rootViewOrigin;
+                            rootController.view.frame = rect;
+                        }
                         
                         //Animating content if needed (Bug ID: #204)
                         if (strongSelf.layoutIfNeededOnUpdate)
@@ -1251,8 +1258,9 @@ NSInteger const kIQPreviousNextButtonToolbarTag     =   -1005;
                         
                         [strongSelf showLog:[NSString stringWithFormat:@"Set %@ origin to : %@",rootController,NSStringFromCGPoint(rootViewOrigin)]];
                     } completion:NULL];
-
-                    self.movedDistance = (_topViewBeginOrigin.y-rootController.view.frame.origin.y);
+                    if (!_shouldFixedViewControllerRootView) {
+                        self.movedDistance = (_topViewBeginOrigin.y-rootController.view.frame.origin.y);
+                    }
                 }
             }
         }
@@ -1281,9 +1289,11 @@ NSInteger const kIQPreviousNextButtonToolbarTag     =   -1005;
                 [strongSelf showLog:[NSString stringWithFormat:@"Restoring %@ origin to : %@",strongRootController,NSStringFromCGPoint(strongSelf.topViewBeginOrigin)]];
                 
                 //Restoring
-                CGRect rect = strongRootController.view.frame;
-                rect.origin = strongSelf.topViewBeginOrigin;
-                strongRootController.view.frame = rect;
+                if (!_shouldFixedViewControllerRootView) {
+                    CGRect rect = strongRootController.view.frame;
+                    rect.origin = strongSelf.topViewBeginOrigin;
+                    strongRootController.view.frame = rect;
+                }
 
                 strongSelf.movedDistance = 0;
                 

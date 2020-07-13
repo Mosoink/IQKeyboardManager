@@ -344,4 +344,7 @@ extern NSInteger const kIQPreviousNextButtonToolbarTag;
  */
 + (nonnull instancetype)new NS_UNAVAILABLE;
 
+
+@property(nonatomic, assign) BOOL shouldFixedViewControllerRootView;
+
 @end
